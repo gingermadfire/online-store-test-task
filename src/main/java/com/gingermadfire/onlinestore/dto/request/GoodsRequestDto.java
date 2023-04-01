@@ -1,6 +1,11 @@
 package com.gingermadfire.onlinestore.dto.request;
 
-public class GoodsUpdateRequestDto {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class GoodsRequestDto {
 
     private String name;
 

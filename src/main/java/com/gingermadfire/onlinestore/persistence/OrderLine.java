@@ -20,10 +20,12 @@ public class OrderLine {
     private Long id;
 
     @Column(nullable = false)
+    @JoinColumn(name = "order_id")
     private Long order_id;
 
     @Column(nullable = false)
-    private Long goods_id;
+    @JoinColumn(name = "goods_id")
+    private long goods_id;
 
     @Column(nullable = false)
     private Integer count;
