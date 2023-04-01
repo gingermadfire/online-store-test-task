@@ -1,6 +1,8 @@
 package com.gingermadfire.onlinestore.service;
 
+import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
 import com.gingermadfire.onlinestore.exception.OrderNotFoundException;
+import com.gingermadfire.onlinestore.map.OrderMapper;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderMapper mapper;
 
     public Order findById(Long id) {
         return orderRepository.findById(id)
@@ -23,17 +26,16 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public void save(Order order) {
-        orderRepository.save(order);
+    public void save(OrderRequestDto request) {
+        orderRepository.save(mapper.map(request));
     }
 
     public void delete(Long id) {
         orderRepository.deleteById(id);
     }
 
-    public void update(Long id, Order order) {
-        order.setId(id);
-        orderRepository.save(order);
+    public void update(Long id, OrderRequestDto request) {
+        orderRepository.save(mapper.map(id, request));
     }
 
 }

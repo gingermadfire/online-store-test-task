@@ -1,5 +1,6 @@
 package com.gingermadfire.onlinestore.controller;
 
+import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
 import com.gingermadfire.onlinestore.persistence.Goods;
 import com.gingermadfire.onlinestore.service.GoodsService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class GoodsController {
 
     private final GoodsService goodsService;
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public Goods findById(@PathVariable Long id) {
         return goodsService.findById(id);
     }
@@ -27,21 +28,21 @@ public class GoodsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(Goods goods) {
-        goodsService.save(goods);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> save(@RequestBody GoodsRequestDto request) {
+        goodsService.save(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteById(Long id) {
         goodsService.delete(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping("/id")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Goods goods) {
-        goodsService.update(id, goods);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody GoodsRequestDto request) {
+        goodsService.update(id, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

@@ -1,6 +1,8 @@
 package com.gingermadfire.onlinestore.service;
 
+import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
 import com.gingermadfire.onlinestore.exception.GoodsNotFoundException;
+import com.gingermadfire.onlinestore.map.GoodsMapper;
 import com.gingermadfire.onlinestore.persistence.Goods;
 import com.gingermadfire.onlinestore.repository.GoodsRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodsService {
 
+    private final GoodsMapper mapper;
     private final GoodsRepository goodsRepository;
 
     public Goods findById(Long id) {
@@ -23,16 +26,15 @@ public class GoodsService {
         return goodsRepository.findAll();
     }
 
-    public void save(Goods goods) {
-        goodsRepository.save(goods);
+    public void save(GoodsRequestDto request) {
+        goodsRepository.save(mapper.map(request));
     }
 
     public void delete(Long id) {
         goodsRepository.deleteById(id);
     }
 
-    public void update(Long id, Goods goods) {
-        goods.setId(id);
-        goodsRepository.save(goods);
+    public void update(Long id, GoodsRequestDto request) {
+        goodsRepository.save(mapper.map(id, request));
     }
 }

@@ -1,5 +1,6 @@
 package com.gingermadfire.onlinestore.controller;
 
+import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public Order findById(@PathVariable Long id) {
         return orderService.findById(id);
     }
@@ -27,20 +28,20 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(Order order) {
-        orderService.save(order);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> save(OrderRequestDto request) {
+        orderService.save(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteById(Long id) {
         orderService.delete(id);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping("/id")
-    public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Order order) {
-        orderService.update(id, order);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OrderRequestDto request) {
+        orderService.update(id, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

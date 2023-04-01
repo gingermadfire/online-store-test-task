@@ -1,8 +1,13 @@
 package com.gingermadfire.onlinestore.dto.request;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.Instant;
 
-public class OrderUpdateRequestDto {
+@Getter
+@Setter
+public class OrderRequestDto {
 
     private String client;
 
