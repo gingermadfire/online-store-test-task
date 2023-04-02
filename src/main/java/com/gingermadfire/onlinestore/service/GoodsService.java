@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.service;
 
 import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.exception.GoodsNotFoundException;
+import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.map.GoodsMapper;
 import com.gingermadfire.onlinestore.persistence.Goods;
 import com.gingermadfire.onlinestore.repository.GoodsRepository;
@@ -19,7 +19,7 @@ public class GoodsService {
 
     public Goods findById(Long id) {
         return goodsRepository.findById(id)
-                .orElseThrow(() -> new GoodsNotFoundException(String.format("Товар по id: %d не найден", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Товар по id: %d не найден", id)));
     }
 
     public List<Goods> findAll() {

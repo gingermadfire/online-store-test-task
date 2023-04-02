@@ -9,8 +9,8 @@ public class OrderLineMapper {
 
     public OrderLine map(OrderLineRequestDto dto) {
         OrderLine orderLine = new OrderLine();
-        orderLine.setOrder_id(dto.getOrder_id());
-        orderLine.setGoods_id(dto.getGoods_id());
+        orderLine.setOrderId(dto.getOrderId());
+        orderLine.setGoodsId(dto.getGoodsId());
         orderLine.setCount(dto.getCount());
 
         return orderLine;
@@ -19,8 +19,8 @@ public class OrderLineMapper {
     public OrderLine map(Long id, OrderLineRequestDto dto) {
         OrderLine orderLine = new OrderLine();
         orderLine.setId(id);
-        orderLine.setOrder_id(dto.getOrder_id());
-        orderLine.setGoods_id(dto.getGoods_id());
+        orderLine.setOrderId(dto.getOrderId());
+        orderLine.setGoodsId(dto.getGoodsId());
         orderLine.setCount(dto.getCount());
 
         return orderLine;

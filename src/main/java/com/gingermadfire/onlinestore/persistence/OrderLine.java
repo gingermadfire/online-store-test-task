@@ -21,11 +21,11 @@ public class OrderLine {
 
     @Column(nullable = false)
     @JoinColumn(name = "order_id")
-    private Long order_id;
+    private Long orderId;
 
     @Column(nullable = false)
     @JoinColumn(name = "goods_id")
-    private long goods_id;
+    private long goodsId;
 
     @Column(nullable = false)
     private Integer count;

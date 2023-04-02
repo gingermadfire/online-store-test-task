@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.service;
 
 import com.gingermadfire.onlinestore.dto.request.OrderLineRequestDto;
-import com.gingermadfire.onlinestore.exception.OrderLineNotFoundException;
+import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.map.OrderLineMapper;
 import com.gingermadfire.onlinestore.persistence.OrderLine;
 import com.gingermadfire.onlinestore.repository.OrderLineRepository;
@@ -21,7 +21,7 @@ public class OrderLineService {
         return orderLineRepository
                 .findById(id)
                 .orElseThrow(
-                        () -> new OrderLineNotFoundException(String.format("Строка заказа по id: %d не найдена", id))
+                        () -> new NotFoundException(String.format("Строка заказа по id: %d не найдена", id))
                 );
     }
 

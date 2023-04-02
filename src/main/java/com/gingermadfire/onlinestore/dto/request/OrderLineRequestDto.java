@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class OrderLineRequestDto {
 
-    public Long order_id;
+    public Long orderId;
 
-    public Long goods_id;
+    public Long goodsId;
 
     public Integer count;
 

@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.service;
 
 import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
-import com.gingermadfire.onlinestore.exception.OrderNotFoundException;
+import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.map.OrderMapper;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.repository.OrderRepository;
@@ -19,7 +19,7 @@ public class OrderService {
 
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(String.format("Заказ по id: %d не найден", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Заказ по id: %d не найден", id)));
     }
 
     public List<Order> findAll() {
