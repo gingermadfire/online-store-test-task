@@ -1,6 +1,7 @@
 package com.gingermadfire.onlinestore.controller;
 
 import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
+import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -12,35 +13,35 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/api/v1/order")
 public class OrderRestController {
 
     private final OrderService orderService;
 
     @GetMapping("/{id}")
-    public Order findById(@PathVariable Long id) {
+    public OrderResponseDto findById(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
     @GetMapping
-    public List<Order> findAll() {
-        return orderService.findAll(); //TODO:return new ResponseEntity<> (goodsService.findAll(),HttpStatus.OK) не надо ли так?
+    public List<OrderResponseDto> findAll() {
+        return orderService.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<?> save(OrderRequestDto request) {
+    public ResponseEntity<?> save(@RequestBody OrderRequestDto request) {
         orderService.save(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity<>(orderService.save(request), HttpStatus.CREATED);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteById(Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
         orderService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OrderRequestDto request) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Order request) {
         orderService.update(id, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

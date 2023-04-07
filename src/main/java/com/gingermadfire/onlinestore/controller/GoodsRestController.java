@@ -1,42 +1,42 @@
 package com.gingermadfire.onlinestore.controller;
 
 import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.persistence.Goods;
+import com.gingermadfire.onlinestore.dto.response.GoodsResponseDto;
 import com.gingermadfire.onlinestore.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/goods")
+@RequestMapping("api/v1/goods")
 public class GoodsRestController {
 
     private final GoodsService goodsService;
 
     @GetMapping("/{id}")
-    public Goods findById(@PathVariable Long id) {
+    public GoodsResponseDto findById(@PathVariable Long id) {
         return goodsService.findById(id);
     }
 
     @GetMapping
-    public List<Goods> findAll() {
-        return goodsService.findAll(); //TODO:return new ResponseEntity<> (goodsService.findAll(),HttpStatus.OK) не надо ли так?
+    public List<GoodsResponseDto> findAll() {
+        return goodsService.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody GoodsRequestDto request) {
-        goodsService.save(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> save(@Validated @RequestBody GoodsRequestDto request) {
+        return new ResponseEntity<>(goodsService.save(request), HttpStatus.CREATED);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteById(Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         goodsService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")

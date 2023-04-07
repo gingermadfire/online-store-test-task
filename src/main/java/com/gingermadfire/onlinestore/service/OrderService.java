@@ -1,8 +1,9 @@
 package com.gingermadfire.onlinestore.service;
 
 import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
+import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
-import com.gingermadfire.onlinestore.map.OrderMapper;
+import com.gingermadfire.onlinestore.mapper.OrderMapper;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,27 +16,35 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderMapper mapper;
+    private final OrderMapper orderMapper;
 
-    public Order findById(Long id) {
-        return orderRepository.findById(id)
+    public OrderResponseDto findById(Long id) {
+        return orderRepository.findById(id).map(orderMapper::map)
                 .orElseThrow(() -> new NotFoundException(String.format("Заказ по id: %d не найден", id)));
     }
 
-    public List<Order> findAll() {
-        return orderRepository.findAll();
+    public List<OrderResponseDto> findAll() {
+        return orderMapper.map(orderRepository.findAll());
     }
 
-    public void save(OrderRequestDto request) {
-        orderRepository.save(mapper.map(request));
+    public OrderResponseDto save(OrderRequestDto request) {
+        Order order = orderMapper.map(request);
+        orderRepository.save(order);
+        return orderMapper.map(order);
+    }
+
+    public Order save(Order order) {
+        orderRepository.save(order);
+        return order;
     }
 
     public void delete(Long id) {
         orderRepository.deleteById(id);
     }
 
-    public void update(Long id, OrderRequestDto request) {
-        orderRepository.save(mapper.map(id, request));
+    public void update(Long id, Order order) {
+        order.setId(id);
+        orderRepository.save(order);
     }
 
 }

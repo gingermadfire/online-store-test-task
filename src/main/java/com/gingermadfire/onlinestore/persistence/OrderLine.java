@@ -19,13 +19,11 @@ public class OrderLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "order_id")
-    private Long orderId;
+    @OneToOne
+    private Order order;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "goods_id")
-    private long goodsId;
+    @ManyToOne
+    private Goods goods;
 
     @Column(nullable = false)
     private Integer count;

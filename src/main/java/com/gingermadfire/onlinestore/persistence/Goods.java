@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -23,6 +24,6 @@ public class Goods {
     private String name;
 
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
 }
