@@ -7,7 +7,6 @@ import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.mapper.OrderLineMapper;
 import com.gingermadfire.onlinestore.mapper.OrderMapper;
 import com.gingermadfire.onlinestore.persistence.Order;
-import com.gingermadfire.onlinestore.persistence.OrderLine;
 import com.gingermadfire.onlinestore.repository.OrderLineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,20 +32,13 @@ public class OrderLineService {
     }
 
     public List<OrderLineResponseDto> findAll() {
-        List<OrderLine> orderLineList = orderLineRepository.findAll();
-
-        if (orderLineList.isEmpty()) {
-            throw new NotFoundException("Ни один товар не найден");
-        }
-
-        return orderLineMapper.map(orderLineList);
+        return orderLineMapper.map(orderLineRepository.findAll());
     }
 
     public OrderLineResponseDto save(OrderLineSaveRequestDto request) {
         Order order = orderService.save(orderMapper.map(request));
-        OrderLine orderLine = orderLineRepository.save( orderLineMapper.map(request, order));
 
-        return orderLineMapper.map(orderLine);
+        return orderLineMapper.map(orderLineRepository.save( orderLineMapper.map(request, order)));
     }
 
     public void delete(Long id) {

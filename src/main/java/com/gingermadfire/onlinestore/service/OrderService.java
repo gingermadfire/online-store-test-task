@@ -24,23 +24,15 @@ public class OrderService {
     }
 
     public List<OrderResponseDto> findAll() {
-        List<Order> orderList = orderRepository.findAll();
-
-        if (orderList.isEmpty()) {
-            throw new NotFoundException("Ни один товар не найден");
-        }
-
-        return orderMapper.map(orderList);
+        return orderMapper.map(orderRepository.findAll());
     }
 
     public OrderResponseDto save(OrderRequestDto request) {
-        Order order = orderRepository.save(orderMapper.map(request));
-        return orderMapper.map(order);
+        return orderMapper.map(orderRepository.save(orderMapper.map(request)));
     }
 
     public Order save(Order order) {
-        orderRepository.save(order);
-        return order;
+        return orderRepository.save(order);
     }
 
     public void delete(Long id) {
