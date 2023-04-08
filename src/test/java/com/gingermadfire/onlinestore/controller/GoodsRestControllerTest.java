@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @WebMvcTest(GoodsRestController.class)
@@ -74,12 +75,11 @@ class GoodsRestControllerTest {
     @Test
     void findAllShouldReturnEmptyList() throws Exception {
         Mockito.when(goodsService.findAll())
-                .thenThrow(new NotFoundException("Ни один товар не найден"));
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/goods"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                        .value("Ни один товар не найден"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
 
     @Test

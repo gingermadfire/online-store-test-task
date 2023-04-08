@@ -1,6 +1,7 @@
 package com.gingermadfire.onlinestore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
 import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.service.OrderService;
@@ -9,14 +10,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,22 +76,21 @@ class OrderRestControllerTest {
 
     }
 
-    /*@Test
+    @Test
     void findAllShouldReturnEmptyList() throws Exception {
-        Mockito.when(goodsService.findAll())
-                .thenThrow(new NotFoundException("Ни один товар не найден"));
+        Mockito.when(orderService.findAll())
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/order"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message")
-                        .value("Ни один товар не найден"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
 
     @Test
     void saveShouldReturnDto() throws Exception {
-        GoodsRequestDto request = new GoodsRequestDto("bbc", BigDecimal.TEN);
-        GoodsResponseDto response = new GoodsResponseDto(1L, "bbc", BigDecimal.TEN);
-        Mockito.when(goodsService.save(Mockito.any(GoodsRequestDto.class)))
+        OrderRequestDto request = new OrderRequestDto("a", "Kazan");
+        OrderResponseDto response = new OrderResponseDto(1L, "a", Instant.EPOCH, "Kazan");
+        Mockito.when(orderService.save(Mockito.any(OrderRequestDto.class)))
                 .thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/order")
@@ -97,13 +98,13 @@ class OrderRestControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(request.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(request.getPrice()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.client").value(request.getClient()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address").value(request.getAddress()));
     }
 
     @Test
     void deleteShouldCallService() throws Exception {
-        Mockito.doNothing().when(goodsService).delete(1L);
+        Mockito.doNothing().when(orderService).delete(1L);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/order/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
@@ -111,13 +112,13 @@ class OrderRestControllerTest {
 
     @Test
     void updateShouldCallService() throws Exception {
-        GoodsRequestDto dto = new GoodsRequestDto();
-        Mockito.doNothing().when(goodsService).update(1L, dto);
+        OrderRequestDto dto = new OrderRequestDto();
+        Mockito.doNothing().when(orderService).update(1L, dto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/order/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }*/
+    }
 
 }

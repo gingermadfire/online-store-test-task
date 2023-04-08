@@ -2,7 +2,6 @@ package com.gingermadfire.onlinestore.controller;
 
 import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
 import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
-import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,7 @@ public class OrderRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         orderService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")
