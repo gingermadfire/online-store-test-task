@@ -33,13 +33,19 @@ public class OrderLineService {
     }
 
     public List<OrderLineResponseDto> findAll() {
-        return orderLineMapper.map(orderLineRepository.findAll());
+        List<OrderLine> orderLineList = orderLineRepository.findAll();
+
+        if (orderLineList.isEmpty()) {
+            throw new NotFoundException("Ни один товар не найден");
+        }
+
+        return orderLineMapper.map(orderLineList);
     }
 
     public OrderLineResponseDto save(OrderLineSaveRequestDto request) {
         Order order = orderService.save(orderMapper.map(request));
-        OrderLine orderLine = orderLineMapper.map(request, order);
-        orderLineRepository.save(orderLine);
+        OrderLine orderLine = orderLineRepository.save( orderLineMapper.map(request, order));
+
         return orderLineMapper.map(orderLine);
     }
 

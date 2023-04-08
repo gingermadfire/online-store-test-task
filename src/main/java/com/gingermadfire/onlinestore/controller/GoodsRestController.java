@@ -30,7 +30,8 @@ public class GoodsRestController {
 
     @PostMapping
     public ResponseEntity<?> save(@Validated @RequestBody GoodsRequestDto request) {
-        return new ResponseEntity<>(goodsService.save(request), HttpStatus.CREATED);
+        GoodsResponseDto save = goodsService.save(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }
 
     @DeleteMapping("/{id}")

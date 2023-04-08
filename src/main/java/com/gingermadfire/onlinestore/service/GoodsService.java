@@ -19,22 +19,23 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
 
     public GoodsResponseDto findById(Long id) {
-        return goodsRepository.findById(id).map(goodsMapper::map)
-                .orElseThrow(() -> new NotFoundException(String.format("Товар по id: %d не найден", id)));
-    }
-
-    public GoodsResponseDto findGoodsById(Long id) {
-        return goodsRepository.findById(id).map(goodsMapper::map)
+        return goodsRepository.findById(id)
+                .map(goodsMapper::map)
                 .orElseThrow(() -> new NotFoundException(String.format("Товар по id: %d не найден", id)));
     }
 
     public List<GoodsResponseDto> findAll() {
-        return goodsMapper.map(goodsRepository.findAll());
+        List<Goods> goodsList = goodsRepository.findAll();
+
+        if (goodsList.isEmpty()) {
+            throw new NotFoundException("Ни один товар не найден");
+        }
+
+        return goodsMapper.map(goodsList);
     }
 
     public GoodsResponseDto save(GoodsRequestDto request) {
-        Goods goods = goodsMapper.map(request);
-        goodsRepository.save(goods);
+        Goods goods = goodsRepository.save(goodsMapper.map(request));
         return goodsMapper.map(goods);
     }
 

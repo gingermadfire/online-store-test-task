@@ -1,5 +1,6 @@
 package com.gingermadfire.onlinestore.controller;
 
+import com.gingermadfire.onlinestore.dto.response.ErrorResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,6 @@ public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
 }

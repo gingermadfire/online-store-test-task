@@ -31,7 +31,7 @@ public class OrderLineMapper {
     public OrderLine map(OrderLineSaveRequestDto dto, Order order) {
         OrderLine orderLine = new OrderLine();
         orderLine.setOrder(order);
-        orderLine.setGoods(goodsMapper.map(goodsService.findGoodsById(dto.getGoodsId())));
+        orderLine.setGoods(goodsMapper.map(goodsService.findById(dto.getGoodsId())));
         orderLine.setCount(dto.getCount());
 
         return orderLine;
