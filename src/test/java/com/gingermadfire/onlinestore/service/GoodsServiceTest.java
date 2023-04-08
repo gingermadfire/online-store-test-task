@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -86,6 +87,8 @@ class GoodsServiceTest {
     @Test
     void saveShouldCallRepository() {
         final Goods goods = new Goods();
+        Mockito.when(goodsRepository.save(Mockito.any(Goods.class)))
+                .thenReturn(new Goods(1L, "pen", BigDecimal.TEN));
 
         GoodsRequestDto request = this.map(goods);
         final GoodsResponseDto actual = goodsService.save(request);

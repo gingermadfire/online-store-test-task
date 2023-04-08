@@ -47,9 +47,8 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    public void update(Long id, Order order) {
-        order.setId(id);
-        orderRepository.save(order);
+    public void update(Long id, OrderRequestDto request) {
+        orderRepository.save(orderMapper.map(id, request));
     }
 
 }

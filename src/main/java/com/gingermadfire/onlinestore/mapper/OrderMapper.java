@@ -41,9 +41,8 @@ public class OrderMapper {
         return dto;
     }
 
-    public Order map(OrderLineUpdateRequestDto dto) {
-        Order order = new Order();
-        order.setDate(Instant.now());
+    public OrderRequestDto map(OrderLineUpdateRequestDto dto) {
+        OrderRequestDto order = new OrderRequestDto();
         order.setClient(dto.getOrder().getClient());
         order.setAddress(dto.getOrder().getAddress());
 
@@ -54,4 +53,13 @@ public class OrderMapper {
         return orderList.stream().map(this::map).toList();
     }
 
+    public Order map(Long id, OrderRequestDto dto) {
+        Order order = new Order();
+        order.setId(id);
+        order.setDate(Instant.now());
+        order.setClient(dto.getClient());
+        order.setAddress(dto.getAddress());
+
+        return order;
+    }
 }
