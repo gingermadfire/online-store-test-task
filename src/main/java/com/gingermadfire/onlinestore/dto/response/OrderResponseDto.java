@@ -1,12 +1,14 @@
 package com.gingermadfire.onlinestore.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class OrderResponseDto {
 
     private Long id;

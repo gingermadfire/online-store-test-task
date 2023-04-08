@@ -30,7 +30,6 @@ public class OrderRestController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody OrderRequestDto request) {
-        orderService.save(request);
         return new ResponseEntity<>(orderService.save(request), HttpStatus.CREATED);
     }
 
@@ -41,7 +40,7 @@ public class OrderRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Order request) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody OrderRequestDto request) {
         orderService.update(id, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
