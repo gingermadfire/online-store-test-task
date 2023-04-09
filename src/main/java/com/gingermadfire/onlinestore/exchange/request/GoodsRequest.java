@@ -1,4 +1,4 @@
-package com.gingermadfire.onlinestore.dto.request;
+package com.gingermadfire.onlinestore.exchange.request;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsRequestDto {
+public class GoodsRequest {
 
     private String name;
 

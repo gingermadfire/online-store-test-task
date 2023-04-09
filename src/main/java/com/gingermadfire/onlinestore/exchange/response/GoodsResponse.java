@@ -1,4 +1,4 @@
-package com.gingermadfire.onlinestore.dto.response;
+package com.gingermadfire.onlinestore.exchange.response;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoodsResponseDto {
+public class GoodsResponse {
 
     private Long id;
 
