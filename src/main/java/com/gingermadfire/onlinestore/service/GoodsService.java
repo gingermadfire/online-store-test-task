@@ -1,9 +1,10 @@
 package com.gingermadfire.onlinestore.service;
 
-import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.dto.response.GoodsResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.GoodsRequest;
+import com.gingermadfire.onlinestore.exchange.response.GoodsResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.mapper.GoodsMapper;
+import com.gingermadfire.onlinestore.persistence.Goods;
 import com.gingermadfire.onlinestore.repository.GoodsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,21 @@ public class GoodsService {
     private final GoodsMapper goodsMapper;
     private final GoodsRepository goodsRepository;
 
-    public GoodsResponseDto findById(Long id) {
+    public GoodsResponse findById(Long id) {
         return goodsRepository.findById(id)
                 .map(goodsMapper::map)
                 .orElseThrow(() -> new NotFoundException(String.format("Товар по id: %d не найден", id)));
     }
+    public Goods get(Long id) {
+        return goodsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Товар по id: %d не найден", id)));
+    }
 
-    public List<GoodsResponseDto> findAll() {
-
+    public List<GoodsResponse> findAll() {
         return goodsMapper.map(goodsRepository.findAll());
     }
 
-    public GoodsResponseDto save(GoodsRequestDto request) {
+    public GoodsResponse save(GoodsRequest request) {
         return goodsMapper.map(goodsRepository.save(goodsMapper.map(request)));
     }
 
@@ -36,7 +40,7 @@ public class GoodsService {
         goodsRepository.deleteById(id);
     }
 
-    public void update(Long id, GoodsRequestDto request) {
+    public void update(Long id, GoodsRequest request) {
         goodsRepository.save(goodsMapper.map(id, request));
     }
 }

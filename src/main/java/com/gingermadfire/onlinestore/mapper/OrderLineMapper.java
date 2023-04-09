@@ -1,54 +1,49 @@
 package com.gingermadfire.onlinestore.mapper;
 
-import com.gingermadfire.onlinestore.dto.request.OrderLineSaveRequestDto;
-import com.gingermadfire.onlinestore.dto.request.OrderLineUpdateRequestDto;
-import com.gingermadfire.onlinestore.dto.response.OrderLineResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.OrderLineSaveRequest;
+import com.gingermadfire.onlinestore.exchange.response.OrderLineResponse;
 import com.gingermadfire.onlinestore.persistence.Order;
 import com.gingermadfire.onlinestore.persistence.OrderLine;
 import com.gingermadfire.onlinestore.service.GoodsService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Component
+@AllArgsConstructor
 public class OrderLineMapper {
 
-    private final GoodsService goodsService;
     private final GoodsMapper goodsMapper;
+    private final OrderMapper orderMapper;
 
-    public OrderLine map(Long id, OrderLineUpdateRequestDto dto) {
+    private final GoodsService goodsService;
+
+    public OrderLine map(OrderLineSaveRequest request, Order order) {
         OrderLine orderLine = new OrderLine();
-        orderLine.setId(id);
-        orderLine.setOrder(dto.getOrder());
-        orderLine.setGoods(dto.getGoods());
-        orderLine.setCount(dto.getCount());
 
-        return orderLine;
-    }
-
-    public OrderLine map(OrderLineSaveRequestDto dto, Order order) {
-        OrderLine orderLine = new OrderLine();
         orderLine.setOrder(order);
-        orderLine.setGoods(goodsMapper.map(goodsService.findById(dto.getGoodsId())));
-        orderLine.setCount(dto.getCount());
+        orderLine.setGoods(goodsMapper.map(goodsService.findById(request.getGoodsId())));
+        orderLine.setCount(request.getCount());
 
         return orderLine;
     }
 
-    public OrderLineResponseDto map(OrderLine orderLine) {
-        OrderLineResponseDto dto = new OrderLineResponseDto();
-        dto.setId(orderLine.getId());
-        dto.setGoods(orderLine.getGoods());
-        dto.setOrder(orderLine.getOrder());
-        dto.setCount(orderLine.getCount());
+    public OrderLineResponse map(OrderLine orderLine) {
+        OrderLineResponse response = new OrderLineResponse();
 
-        return dto;
+        response.setId(orderLine.getId());
+        response.setGoods(goodsMapper.map(orderLine.getGoods()));
+        response.setOrder(orderMapper.map(orderLine.getOrder()));
+        response.setCount(orderLine.getCount());
+
+        return response;
     }
 
-    public List<OrderLineResponseDto> map(List<OrderLine> orderLines) {
-        return orderLines.stream().map(this::map).toList();
+    public List<OrderLineResponse> map(List<OrderLine> orderLines) {
+        return orderLines.stream()
+                .map(this::map)
+                .toList();
     }
 
 }

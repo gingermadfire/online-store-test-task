@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.controller;
 
-import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.dto.response.GoodsResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.GoodsRequest;
+import com.gingermadfire.onlinestore.exchange.response.GoodsResponse;
 import com.gingermadfire.onlinestore.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,18 +19,18 @@ public class GoodsRestController {
     private final GoodsService goodsService;
 
     @GetMapping("/{id}")
-    public GoodsResponseDto findById(@PathVariable Long id) {
+    public GoodsResponse findById(@PathVariable Long id) {
         return goodsService.findById(id);
     }
 
     @GetMapping
-    public List<GoodsResponseDto> findAll() {
+    public List<GoodsResponse> findAll() {
         return goodsService.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Validated @RequestBody GoodsRequestDto request) {
-        GoodsResponseDto save = goodsService.save(request);
+    public ResponseEntity<GoodsResponse> save(@Validated @RequestBody GoodsRequest request) {
+        GoodsResponse save = goodsService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }
 
@@ -41,7 +41,7 @@ public class GoodsRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody GoodsRequestDto request) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody GoodsRequest request) {
         goodsService.update(id, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

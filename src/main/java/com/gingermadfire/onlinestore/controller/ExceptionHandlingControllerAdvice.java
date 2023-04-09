@@ -1,6 +1,6 @@
 package com.gingermadfire.onlinestore.controller;
 
-import com.gingermadfire.onlinestore.dto.response.ErrorResponse;
+import com.gingermadfire.onlinestore.exchange.response.ErrorResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
-package com.gingermadfire.onlinestore.dto.request;
+package com.gingermadfire.onlinestore.exchange.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderLineRequestDto {
+public class OrderLineRequest {
 
     public Long orderId;
 

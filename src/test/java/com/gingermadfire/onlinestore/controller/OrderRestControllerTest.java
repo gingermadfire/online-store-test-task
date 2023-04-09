@@ -1,8 +1,8 @@
 package com.gingermadfire.onlinestore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
-import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.OrderRequest;
+import com.gingermadfire.onlinestore.exchange.response.OrderResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.service.OrderService;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class OrderRestControllerTest {
 
     @Test
     void findByIdShouldReturnDto() throws Exception {
-        OrderResponseDto dto = new OrderResponseDto(1L, "a", Instant.EPOCH, "Kazan");
+        OrderResponse dto = new OrderResponse(1L, "a", Instant.EPOCH, "Kazan");
 
         Mockito.when(orderService.findById(1L))
                 .thenReturn(dto);
@@ -47,7 +47,6 @@ class OrderRestControllerTest {
                 .andExpect(jsonPath("$.client").value(dto.getClient()))
                 .andExpect(jsonPath("$.date").value(dto.getDate().toString()))
                 .andExpect(jsonPath("$.address").value(dto.getAddress()));
-
     }
 
     @Test
@@ -59,12 +58,12 @@ class OrderRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(jsonPath("$.message")
                         .value("Товар по id: 0 не найден"));
-
     }
 
     @Test
     void findAllShouldReturnDtos() throws Exception {
-        List<OrderResponseDto> dtos = List.of(new OrderResponseDto(1L, "a", Instant.EPOCH, "Kazan"));
+        List<OrderResponse> dtos = List.of(new OrderResponse(1L, "a", Instant.EPOCH, "Kazan"));
+
         Mockito.when(orderService.findAll())
                 .thenReturn(dtos);
 
@@ -73,7 +72,6 @@ class OrderRestControllerTest {
                 .andExpect(jsonPath("$.[:1].client").value(dtos.get(0).getClient()))
                 .andExpect(jsonPath("$.[:1].date").value(dtos.get(0).getDate().toString()))
                 .andExpect(jsonPath("$.[:1].address").value(dtos.get(0).getAddress()));
-
     }
 
     @Test
@@ -88,9 +86,10 @@ class OrderRestControllerTest {
 
     @Test
     void saveShouldReturnDto() throws Exception {
-        OrderRequestDto request = new OrderRequestDto("a", "Kazan");
-        OrderResponseDto response = new OrderResponseDto(1L, "a", Instant.EPOCH, "Kazan");
-        Mockito.when(orderService.save(Mockito.any(OrderRequestDto.class)))
+        OrderRequest request = new OrderRequest(1L,"a", "Kazan");
+        OrderResponse response = new OrderResponse(1L, "a", Instant.EPOCH, "Kazan");
+
+        Mockito.when(orderService.save(Mockito.any(OrderRequest.class)))
                 .thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/order")
@@ -112,7 +111,8 @@ class OrderRestControllerTest {
 
     @Test
     void updateShouldCallService() throws Exception {
-        OrderRequestDto dto = new OrderRequestDto();
+        OrderRequest dto = new OrderRequest();
+
         Mockito.doNothing().when(orderService).update(1L, dto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/order/{id}", 1L)

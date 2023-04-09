@@ -1,8 +1,8 @@
 package com.gingermadfire.onlinestore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.dto.response.GoodsResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.GoodsRequest;
+import com.gingermadfire.onlinestore.exchange.response.GoodsResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.service.GoodsService;
 import org.junit.jupiter.api.Test;
@@ -32,18 +32,17 @@ class GoodsRestControllerTest {
     private GoodsService goodsService;
 
     @Test
-    void findByIdShouldReturnDto() throws Exception {
-        GoodsResponseDto dto = new GoodsResponseDto(1L, "qwerty", BigDecimal.TEN);
+    void findByIdShouldReturnResponse() throws Exception {
+        GoodsResponse response = new GoodsResponse(1L, "qwerty", BigDecimal.TEN);
 
         Mockito.when(goodsService.findById(1L))
-                .thenReturn(dto);
+                .thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/goods/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(dto.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(dto.getName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(dto.getPrice()));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(response.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(response.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(response.getPrice()));
     }
 
     @Test
@@ -55,12 +54,12 @@ class GoodsRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
                         .value("Товар по id: 0 не найден"));
-
     }
 
     @Test
     void findAllShouldReturnDtos() throws Exception {
-        List<GoodsResponseDto> dtos = List.of(new GoodsResponseDto());
+        List<GoodsResponse> dtos = List.of(new GoodsResponse());
+
         Mockito.when(goodsService.findAll())
                 .thenReturn(dtos);
 
@@ -69,7 +68,6 @@ class GoodsRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[:1].id").value(dtos.get(0).getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[:1].name").value(dtos.get(0).getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[:1].price").value(dtos.get(0).getPrice()));
-
     }
 
     @Test
@@ -84,9 +82,10 @@ class GoodsRestControllerTest {
 
     @Test
     void saveShouldReturnDto() throws Exception {
-        GoodsRequestDto request = new GoodsRequestDto("bbc", BigDecimal.TEN);
-        GoodsResponseDto response = new GoodsResponseDto(1L, "bbc", BigDecimal.TEN);
-        Mockito.when(goodsService.save(Mockito.any(GoodsRequestDto.class)))
+        GoodsRequest request = new GoodsRequest("bbc", BigDecimal.TEN);
+        GoodsResponse response = new GoodsResponse(1L, "bbc", BigDecimal.TEN);
+
+        Mockito.when(goodsService.save(Mockito.any(GoodsRequest.class)))
                 .thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/goods")
@@ -108,7 +107,8 @@ class GoodsRestControllerTest {
 
     @Test
     void updateShouldCallService() throws Exception {
-        GoodsRequestDto dto = new GoodsRequestDto();
+        GoodsRequest dto = new GoodsRequest();
+
         Mockito.doNothing().when(goodsService).update(1L, dto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/goods/{id}", 1L)

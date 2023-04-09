@@ -1,4 +1,4 @@
-package com.gingermadfire.onlinestore.dto.request;
+package com.gingermadfire.onlinestore.exchange.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequestDto {
+public class OrderRequest {
+
+    private Long id;
 
     private String client;
 

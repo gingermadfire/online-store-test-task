@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.service;
 
-import com.gingermadfire.onlinestore.dto.request.OrderRequestDto;
-import com.gingermadfire.onlinestore.dto.response.OrderResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.OrderRequest;
+import com.gingermadfire.onlinestore.exchange.response.OrderResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.mapper.OrderMapper;
 import com.gingermadfire.onlinestore.persistence.Order;
@@ -37,7 +37,7 @@ class OrderServiceTest {
         final Order order = new Order();
         Mockito.when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
-        final OrderResponseDto actual = orderService.findById(1L);
+        final OrderResponse actual = orderService.findById(1L);
 
         Assertions.assertNotNull(actual);
         Mockito.verify(orderRepository).findById(1L);
@@ -62,7 +62,7 @@ class OrderServiceTest {
         final List<Order> orderList = List.of(new Order());
         Mockito.when(orderRepository.findAll()).thenReturn(orderList);
 
-        final List<OrderResponseDto> actual = orderService.findAll();
+        final List<OrderResponse> actual = orderService.findAll();
 
         Assertions.assertNotNull(actual);
         Mockito.verify(orderRepository).findAll();
@@ -70,18 +70,15 @@ class OrderServiceTest {
     }
 
     @Test
-    void findAllShouldProduceNotFoundException() {
+    void findAllShouldReturnEmptyList() {
         final List<Order> emptyOrderList = Collections.emptyList();
         Mockito.when(orderRepository.findAll()).thenReturn(emptyOrderList);
 
-        Assertions.assertThrows(
-                NotFoundException.class,
-                () -> orderService.findAll(),
-                "Ни один товар не найден"
-        );
+        final List<OrderResponse> actual = orderService.findAll();
 
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(Collections.emptyList(), actual);
         Mockito.verify(orderRepository).findAll();
-        Mockito.verify(orderMapper, Mockito.never()).map(emptyOrderList);
     }
 
     @Test
@@ -90,8 +87,8 @@ class OrderServiceTest {
         Mockito.when(orderRepository.save(Mockito.any(Order.class)))
                 .thenReturn(new Order(1L, "a", Instant.now(), "Kazan"));
 
-        OrderRequestDto request = this.map(order);
-        final OrderResponseDto actual = orderService.save(request);
+        OrderRequest request = this.map(order);
+        final OrderResponse actual = orderService.save(request);
 
         Assertions.assertNotNull(actual);
         Mockito.verify(orderMapper).map(request);
@@ -106,14 +103,14 @@ class OrderServiceTest {
 
     @Test
     void updateShouldCallRepository() {
-        OrderRequestDto dto = new OrderRequestDto();
+        OrderRequest dto = new OrderRequest();
         orderService.update(1L, dto);
 
         Mockito.verify(orderMapper).map(1L, dto);
     }
 
-    private OrderRequestDto map(Order order) {
-        OrderRequestDto dto = new OrderRequestDto();
+    private OrderRequest map(Order order) {
+        OrderRequest dto = new OrderRequest();
 
         dto.setAddress(order.getAddress());
         dto.setClient(order.getClient());

@@ -1,4 +1,4 @@
-package com.gingermadfire.onlinestore.dto.response;
+package com.gingermadfire.onlinestore.exchange.response;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class OrderResponseDto {
+public class OrderResponse {
 
     private Long id;
 

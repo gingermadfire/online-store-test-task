@@ -1,7 +1,7 @@
 package com.gingermadfire.onlinestore.service;
 
-import com.gingermadfire.onlinestore.dto.request.GoodsRequestDto;
-import com.gingermadfire.onlinestore.dto.response.GoodsResponseDto;
+import com.gingermadfire.onlinestore.exchange.request.GoodsRequest;
+import com.gingermadfire.onlinestore.exchange.response.GoodsResponse;
 import com.gingermadfire.onlinestore.exception.NotFoundException;
 import com.gingermadfire.onlinestore.mapper.GoodsMapper;
 import com.gingermadfire.onlinestore.persistence.Goods;
@@ -35,9 +35,10 @@ class GoodsServiceTest {
     @Test
     void findByIdShouldCallRepository() {
         final Goods goods = new Goods();
+
         Mockito.when(goodsRepository.findById(1L)).thenReturn(Optional.of(goods));
 
-        final GoodsResponseDto actual = goodsService.findById(1L);
+        final GoodsResponse actual = goodsService.findById(1L);
 
         Assertions.assertNotNull(actual);
         Mockito.verify(goodsRepository).findById(1L);
@@ -60,9 +61,10 @@ class GoodsServiceTest {
     @Test
     void findAllShouldCallRepository() {
         final List<Goods> goods = List.of(new Goods());
+
         Mockito.when(goodsRepository.findAll()).thenReturn(goods);
 
-        final List<GoodsResponseDto> actual = goodsService.findAll();
+        final List<GoodsResponse> actual = goodsService.findAll();
 
         Assertions.assertNotNull(actual);
         Mockito.verify(goodsRepository).findAll();
@@ -70,28 +72,27 @@ class GoodsServiceTest {
     }
 
     @Test
-    void findAllShouldProduceNotFoundException() {
+    void findAllShouldReturnEmptyList() {
         final List<Goods> emptyGoodsList = Collections.emptyList();
+
         Mockito.when(goodsRepository.findAll()).thenReturn(emptyGoodsList);
 
-        Assertions.assertThrows(
-                NotFoundException.class,
-                () -> goodsService.findAll(),
-                "Ни один товар не найден"
-        );
+        final List<GoodsResponse> actual = goodsService.findAll();
 
+        Assertions.assertNotNull(actual);
+        Assertions.assertEquals(Collections.emptyList(), actual);
         Mockito.verify(goodsRepository).findAll();
-        Mockito.verify(goodsMapper, Mockito.never()).map(emptyGoodsList);
     }
 
     @Test
     void saveShouldCallRepository() {
         final Goods goods = new Goods();
+
         Mockito.when(goodsRepository.save(Mockito.any(Goods.class)))
                 .thenReturn(new Goods(1L, "pen", BigDecimal.TEN));
 
-        GoodsRequestDto request = this.map(goods);
-        final GoodsResponseDto actual = goodsService.save(request);
+        GoodsRequest request = this.map(goods);
+        final GoodsResponse actual = goodsService.save(request);
 
         Assertions.assertNotNull(actual);
         Mockito.verify(goodsMapper).map(request);
@@ -99,22 +100,22 @@ class GoodsServiceTest {
 
     @Test
     void deleteShouldCallRepository() {
-
         goodsService.delete(1L);
-
         Mockito.verify(goodsRepository).deleteById(1L);
     }
 
     @Test
     void update_shouldCallRepository() {
-        GoodsRequestDto dto = new GoodsRequestDto();
+        GoodsRequest dto = new GoodsRequest();
+
         goodsService.update(1L, dto);
 
         Mockito.verify(goodsMapper).map(1L, dto);
     }
 
-    private GoodsRequestDto map(Goods goods) {
-        GoodsRequestDto dto = new GoodsRequestDto();
+    private GoodsRequest map(Goods goods) {
+        GoodsRequest dto = new GoodsRequest();
+
         dto.setName(goods.getName());
         dto.setPrice(goods.getPrice());
 
